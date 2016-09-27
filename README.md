@@ -1,1 +1,14 @@
 # FFPagingViewController
+
+1.可自定义修改菜单栏字体颜色、大小
+2.滚动视图带有缓存功能，当多个视图控制器加在UIScrollView上会占用很多内存，因此加入了缓存策略
+3.实现类似UITableView的代理和数据源代理，FFPagingViewControllerDelegate和FFPagingViewControllerDataSource，更加智能化的封装
+4.定制化程度高，可根据自身需求设置相应属性
+5.耦合性低，把FFPagingViewController文件夹拖入项目中，即可使用。
+
+使用方法：
+1.导入头文件：#import "FFPagingViewController.h"
+2.创建FFPagingViewController和FFPagingHeaderView对象，设置相应属性
+3.实现FFPagingViewControllerDataSource, FFPagingViewControllerDelegate两个代理方法即可，具体可参考源码
+
+欢迎各位大大指教，如有更好意见可提出交流，本人QQ:270452746
