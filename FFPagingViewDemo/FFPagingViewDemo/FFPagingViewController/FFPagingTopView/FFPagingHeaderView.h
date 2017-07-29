@@ -17,6 +17,14 @@
  */
 @property(nonatomic, strong) NSArray <NSString *> *titles;
 
+
+/**
+ *  是否显示所有的标题
+ *  注：默认为NO。此处设置为YES，则设置如下itemWidth的属性无效，且当标签过多时可能会造成标签显示问题
+ *
+ */
+@property(nonatomic, assign) BOOL   showAllItems;
+
 /**
  *  设置item宽度
  *

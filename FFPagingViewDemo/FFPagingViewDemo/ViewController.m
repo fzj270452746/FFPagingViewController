@@ -41,7 +41,7 @@
 - (void)setupData
 {
     //创建controller
-    for (NSInteger i=0; i<7; i++) {
+    for (NSInteger i=0; i<3; i++) {
         UIViewController *vc = [[UIViewController alloc] init];
         vc.view.backgroundColor = LRRandomColor;
         [self.viewControllers addObject:vc];
@@ -108,7 +108,7 @@
         _pagingHeaderView.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, kHeaderViewTop);
         _pagingHeaderView.itemWidth = 80;
         //        _pagingHeaderView.scale = true;
-        _pagingHeaderView.titles = @[@"热门", @"美女", @"精选", @"直播", @"关注", @"游戏", @"哈哈"];
+        _pagingHeaderView.titles = @[@"热门", @"美女", @"精选"];
     }
     return _pagingHeaderView;
 }

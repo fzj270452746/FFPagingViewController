@@ -36,6 +36,7 @@
         _textColor = kDefaultTextColor;
         _selectTextColor = kDefaultSelectTextColor;
         _scale = false;
+        _showAllItems = false;
     }
     return self;
 }
@@ -75,6 +76,8 @@
 - (void)setLineColor:(UIColor *)lineColor
 {
     _lineColor = lineColor;
+    
+    self.lineLayer.backgroundColor = _lineColor.CGColor;
 }
 
 - (void)setTextColor:(UIColor *)textColor
@@ -92,41 +95,17 @@
     _scale = scale;
 }
 
+- (void)setShowAllItems:(BOOL)showAllItems {
+    _showAllItems = showAllItems;
+    
+    [self reloadAllTitles];
+}
+
 - (void)setTitles:(NSArray<NSString *> *)titles
 {
     _titles = titles;
     
-    self.scrollview.frame = CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height - kLineHeight);
-    self.scrollview.contentSize = CGSizeMake(titles.count * self.itemWidth, self.frame.size.height - kLineHeight);
-    
-    if (titles.count) {
-        for (NSInteger i=0; i<titles.count; i++) {
-            FFPagingViewItem *item = [[FFPagingViewItem alloc] init];
-            [self.scrollview addSubview:item];
-            
-            //当自定义宽度小于平分title的宽度时，使用根据屏幕宽度进行等分宽度
-            CGFloat width = self.scrollview.bounds.size.width / titles.count;
-            if (self.itemWidth <= width) {
-                self.itemWidth = width;
-            }
-            
-            item.frame = CGRectMake(i * self.itemWidth, 0, self.itemWidth, self.bounds.size.height);
-            item.text = titles[i];
-
-            if (i == 0 && self.scale) {
-                item.transform = CGAffineTransformMakeScale(1.3, 1.3);
-            }
-            
-            item.font = self.font;
-            item.textColor = self.textColor;
-            item.tag = i + 1;
-            item.textAlignment = NSTextAlignmentCenter;
-            item.userInteractionEnabled = true;
-            [item addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGesture:)]];
-        }
-    }
-    
-    self.lineLayer.frame = CGRectMake(0, self.scrollview.bounds.size.height, self.scrollview.bounds.size.width, kLineHeight);
+    [self reloadAllTitles];
 }
 
 - (void)setContentOffset:(CGPoint)contentOffset
@@ -173,6 +152,44 @@
     }
     
     self.currentIndex = index;
+}
+
+#pragma mark - Private
+- (void)reloadAllTitles {
+    self.scrollview.frame = CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height - kLineHeight);
+    if (_titles.count) {
+        for (NSInteger i=0; i<_titles.count; i++) {
+            FFPagingViewItem *item = [[FFPagingViewItem alloc] init];
+            [self.scrollview addSubview:item];
+            
+            //当自定义宽度小于平分title的宽度时，使用根据屏幕宽度进行等分宽度
+            CGFloat width = self.scrollview.bounds.size.width / _titles.count;
+            if (self.itemWidth <= width) {
+                self.itemWidth = width;
+            }
+            
+            if (self.showAllItems) {
+                self.itemWidth = width;
+            }
+            
+            item.frame = CGRectMake(i * self.itemWidth, 0, self.itemWidth, self.bounds.size.height);
+            item.text = _titles[i];
+            
+            if (i == 0 && self.scale) {
+                item.transform = CGAffineTransformMakeScale(1.3, 1.3);
+            }
+            
+            item.font = self.font;
+            item.textColor = self.textColor;
+            item.tag = i + 1;
+            item.textAlignment = NSTextAlignmentCenter;
+            item.userInteractionEnabled = true;
+            [item addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGesture:)]];
+        }
+    }
+    self.scrollview.contentSize = CGSizeMake(_titles.count * self.itemWidth, self.frame.size.height - kLineHeight);
+    
+    self.lineLayer.frame = CGRectMake(0, self.scrollview.bounds.size.height, self.scrollview.bounds.size.width, kLineHeight);
 }
 
 #pragma mark - getter
